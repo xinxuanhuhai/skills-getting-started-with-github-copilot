@@ -38,6 +38,18 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "羽毛球": {
+        "description": "Badminton club for fun and fitness",
+        "schedule": "Wednesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 16,
+        "participants": []
+    },
+    "篮球": {
+        "description": "Basketball team practices and games",
+        "schedule": "Tuesdays and Thursdays, 5:00 PM - 6:30 PM",
+        "max_participants": 20,
+        "participants": []
     }
 }
 
@@ -60,8 +72,14 @@ def signup_for_activity(activity_name: str, email: str):
         raise HTTPException(status_code=404, detail="Activity not found")
 
     # Get the specific activity
-    activity = activities[activity_name]
 
+    activity = activities[activity_name]
+# Validate not already signed up
+
+    if email in activity["participants"]:
+        raise HTTPException(
+            status_code=400, detail="Student already signed up for this activity")              
+    # Validate not full                     
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
